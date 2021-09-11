@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Examples - mumu</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link href="../style.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Examples";
+    var mkdocs_page_input_path = "examples.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/c.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> mumu</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Welcome to mumu</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gsg/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../reference/">Reference</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture & Design</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Examples</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#loading-x86-assembly">Loading x86 Assembly</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#16-bit-real-mode">16 bit Real Mode</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#64-bit-long-mode">64 bit Long Mode</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#loading-simple-c-program">Loading Simple C Program</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#using-xml-file">Using XML File</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#static-scheduling">Static Scheduling</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#multicore-application">Multicore Application</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#using-serial-console">Using Serial Console</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#shared-memory">Shared Memory</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#inter-vm-communication">Inter VM Communication</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#sampling-port">Sampling Port</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">mumu</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Examples</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="examples">Examples</h1>
+<h2 id="loading-x86-assembly">Loading x86 Assembly</h2>
+<p>In mumu you can load different type of x86 assemblies. Currently mumu starts in long mode. So you should start the operating system with 32bit or 64 bit mode.</p>
+<h3 id="16-bit-real-mode">16 bit Real Mode</h3>
+<p>To enable 16 bit real mode you should remove <code>page_table</code> configurations. Sample program:</p>
+<pre><code class="language-s">.globl _start
+    .code16
+_start:
+    xorw %ax, %ax
+
+loop:
+    out %ax, $0xf1
+    inc %ax
+    jmp loop
+</code></pre>
+<p>assemble this program and extract text section. </p>
+<h3 id="64-bit-long-mode">64 bit Long Mode</h3>
+<pre><code class="language-s">_start:
+    xorw %dax, %dax
+
+loop:
+    out %dax, $0xf1
+    inc %dax
+    jmp loop
+
+</code></pre>
+<h2 id="loading-simple-c-program">Loading Simple C Program</h2>
+<p>It&rsquo;s possible to run bare metal C programs inside mumu. Also, there is a <code>common.h</code> library that programmers can be use. To run bare metal applications you should avoid of dynamic linking and external libraries (it&rsquo;s ok when you compile with static linking). </p>
+<p>Program:</p>
+<pre><code class="language-c">#include &quot;common.h&quot;
+
+void main(){
+    char a[5] = {'H','e','l','l','o'};
+    for(int k = 0; k &lt; 5; k++){
+        write(a[k]);
+    }
+}
+</code></pre>
+<p>Directory and makefile</p>
+<pre><code>cd examples/hello-world
+make
+</code></pre>
+<p>Output:</p>
+<pre><code>Hello World !
+</code></pre>
+<h2 id="using-xml-file">Using XML File</h2>
+<p>Create a XML parser.</p>
+<pre><code class="language-c++">xml_parser* parser = new xml_parser();
+auto parsed_vms =  parser-&gt;parse(&quot;/home/musa/test.xml&quot;);
+</code></pre>
+<p>Set up VMs with parsed data:</p>
+<pre><code class="language-c++">auto vm_list = new list&lt;VM*&gt;();
+for(auto l: *parsed_vms){
+    VM *vm = new VM(_kvm);
+    for(auto k = 0; k &lt; l-&gt;cores.size(); k++){
+        vm-&gt;create_vcpu(k,l-&gt;cores[k]-&gt;core_id,l-&gt;cores[k]-&gt;physical_core_map);
+    }        
+    vm-&gt;mem_init();
+    vm-&gt;load_binary(l-&gt;binary_path);
+    l-&gt;vm = vm;
+    vm_list-&gt;push_back(vm);
+}
+</code></pre>
+<h2 id="static-scheduling">Static Scheduling</h2>
+<p>In order to use static scheduler you should parse information from XMl file. </p>
+<pre><code class="language-c++">#include &lt;iostream&gt;
+
+auto sched_info = parser-&gt;generate_core_scheduling_order(parser-&gt;windows);
+
+vector&lt;Scheduler*&gt; scheduler_list;
+for(auto core = 0; core&lt;4; core++){
+    Scheduler* sch = new Scheduler(&amp;sched_info[core],core);
+    scheduler_list.push_back(sch);
+}
+</code></pre>
+<h2 id="multicore-application">Multicore Application</h2>
+<h2 id="using-serial-console">Using Serial Console</h2>
+<h2 id="shared-memory">Shared Memory</h2>
+<h2 id="inter-vm-communication">Inter VM Communication</h2>
+<h3 id="sampling-port">Sampling Port</h3>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../architecture/" class="btn btn-neutral" title="Architecture & Design"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../architecture/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

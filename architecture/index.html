@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Architecture & Design - mumu</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link href="../style.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Architecture & Design";
+    var mkdocs_page_input_path = "architecture.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/c.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> mumu</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Welcome to mumu</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gsg/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../reference/">Reference</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Architecture & Design</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#partition-vm">Partition VM</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#multicore">Multicore</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#static-scheduling">Static Scheduling</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#shared-memory">Shared Memory</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">mumu</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Architecture & Design</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="architecture-design">Architecture &amp; Design</h1>
+<p><strong>mumu</strong> uses KVM in the background to run virtual machines. It also makes use of posix threads and posix libraries.</p>
+<h2 id="partition-vm">Partition VM</h2>
+<p><strong>mumu</strong> calls each VM as <em>Partition VM</em>. From now on partition vms will be referred to as partition. When a partition starts, it have a 6MB of space. In this area, page tables are given to the user as a 1:1 map. In this way, injection can be made easily through physical and virtual addresses during the first boot phase.</p>
+<pre><code class="language-t">+--------------------+ 0x0000000 User Start
+|++++++++++++++++++++|
+|++++++++++++++++++++|
+|++++++++++++++++++++|
+|++++++++++++++++++++|
+|++++++++++++++++++++|
++--------------------+ 0x1000000 Page Table Entries
+|                    |
++--------------------+
+|                    |
++--------------------+
+|                    |
++--------------------+ 0x1400000 Channel Informations
+|                    |
+|   ^     ^     ^    |
+|   |     |     |    |
+|   |     |     |    | 0x600000 Stack
++---+-----+-----+----+
+
+   SINGLE PARTITION
+</code></pre>
+<p>Partitions should be defined under the <code>&lt;Partitions&gt;</code> node in XML file. Each partition should similar to this:</p>
+<pre><code class="language-xml">&lt;Partition&gt;
+    &lt;PartitionDefinition Identifier=&quot;1&quot; Name=&quot;test1&quot; BinaryPath=&quot;hello.bin&quot; ScheduleChangeAction=&quot;IDLE&quot; SetModuleSchedule=&quot;false&quot; SystemPartition=&quot;true&quot;/&gt;
+    &lt;PartitionPeriodicity Duration=&quot;20000000&quot; Period=&quot;3000&quot;/&gt;
+    &lt;CoreAffinity&gt;
+        &lt;CoreMapping LogicalCoreId=&quot;0&quot; PhysicalCoreId=&quot;3&quot;/&gt;
+        &lt;CoreMapping LogicalCoreId=&quot;1&quot; PhysicalCoreId=&quot;2&quot;/&gt;
+    &lt;/CoreAffinity&gt;
+&lt;/Partition&gt;
+</code></pre>
+<h2 id="multicore">Multicore</h2>
+<p>mumu can run different vcpu&rsquo;s in different cores thanks to posix threads. In XML file programmers should explicitly define affinity of the cores.</p>
+<pre><code class="language-t">+-------+---------------+
+|Core 1 |  VM-1 VCPU1   |
++-------+---------------+
+|Core 2 |  VM-1 VCPU2   |
++-------+---------------+
+|Core 3 |  VM-2 VCPU1   |
++-------+---------------+
+</code></pre>
+<p>In XML file programmer should define as follow:</p>
+<pre><code class="language-xml">&lt;CoreAffinity&gt;
+    &lt;CoreMapping LogicalCoreId=&quot;0&quot; PhysicalCoreId=&quot;3&quot;/&gt;
+    &lt;CoreMapping LogicalCoreId=&quot;1&quot; PhysicalCoreId=&quot;2&quot;/&gt;
+&lt;/CoreAffinity&gt;
+</code></pre>
+<h2 id="static-scheduling">Static Scheduling</h2>
+<p>Static scheduling is a mechanism that allows to regulate the order in which threads execute in the code. When we look at the mumu level, we see that these are vms.</p>
+<pre><code class="language-t">         0ms         50ms                120ms     150ms
+         +------------+-------------------+-----------+
+Core 1   | VM1 VCPU1  |    VM3 VCPU1      | VM2 VCPU3 |
+         +------------+-------------------+-----------+
+Core 2   | VM1 VCPU2  |    VM2 VCPU2      | VM1 VCPU2 |
+         +------------+-------------------+-----------+
+Core 3   | VM2 VCPU2  |    VM1 VCPU1      | VM2 VCPU2 |
+         +------------+-------------------+-----------+
+Core 4   | VM3 VCPU1  |    VM2 VCPU1      | VM1 VCPU1 |
+         +------------+-------------------+-----------+
+</code></pre>
+<p>We can measure scheduling times with <code>uftrace</code> thanks to the mumu runs on C++. The static schedule structure can be seen on uftrace as follows.
+<img alt="Uftrace Output" src="../2021-09-11-00-17-29.png" /></p>
+<p>Scheduling times can be configured through XML file.</p>
+<pre><code class="language-xml">&lt;Schedules MajorFrameDuration=&quot;60000000&quot; ScheduleIdentifier=&quot;1&quot; InitialModuleSchedule=&quot;true&quot;&gt;
+    &lt;PartitionTimeWindow PartitionNameRef=&quot;test1&quot; Duration=&quot;2000&quot; Offset=&quot;0&quot; /&gt;
+    &lt;PartitionTimeWindow PartitionNameRef=&quot;test2&quot; Duration=&quot;2000&quot; Offset=&quot;20000000&quot; /&gt;
+    &lt;PartitionTimeWindow PartitionNameRef=&quot;test1&quot; Duration=&quot;2000&quot; Offset=&quot;40000000&quot; /&gt;
+    &lt;PartitionTimeWindow PartitionNameRef=&quot;test1&quot; Duration=&quot;2000&quot; Offset=&quot;60000000&quot; /&gt;
+&lt;/Schedules&gt;
+</code></pre>
+<h2 id="shared-memory">Shared Memory</h2>
+<p>Qemu uses the ivshmem infrastructure for shared memory. Actually, ivhsmem is installed in Linux devices as a PCI device. Then, communication can take place by <code>read</code> and <code>write</code> syscalls to these PCI devices. Ivhsmem has a lot of features (like interrupts etc) but there is a limitation that we can only use one instance of them. </p>
+<pre><code>       +--------------------------+
+       |                          |
++------+---+   +---------+        |
+|          |   |         |        |
+|   Qemu   |   |   Qemu  +------+ |
+|          |   |         |      | |
++----+-----+   +-----+---+      | |
+     |               |          | |
++----+---------------+---+   +--+-+--+
+|          KVM           |   | Memory|
++------------------------+   +-------+
+</code></pre>
+<p>In <strong>mumu</strong> we designed a simple principle; each startup we inject a shared memory map into memory region (currently 0x14000). The operating system knows in which area the shared memories are here. Then, it can read and write to these addresses. At the same time, we can grant write and read permissions to these regions in the XML file. Thanks to this, while a vm partition is writing, other vm partitions can only listen. This feature is used for the sampling port.</p>
+<pre><code>+---------------+
+|+++++++++++++++| Shared Memory 1 0x600000
++---------------+ &lt;------+
+|               |        |
+|               |        |
+|               |        +---------------------+
+|               |                              |
+|               |                              |
+|               |                              |
++---------------+                              |
+|0x140000       |                              |
+|Shared Infos   +---+                          |
++---------------+   |   +--------+---------+   |
+|               |   |   |  mem1  |0x6000000+---+
+|               |   |   +--------+---------+
+|               |   |   |  mem2  |0x8000000|
+|               |   +--&gt;+--------+---------+
++---------------+       
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../examples/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../reference/" class="btn btn-neutral" title="Reference"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../reference/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../examples/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

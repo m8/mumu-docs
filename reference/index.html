@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Reference - mumu</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link href="../style.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Reference";
+    var mkdocs_page_input_path = "reference.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/c.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> mumu</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Welcome to mumu</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gsg/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Reference</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#kvm-functions">KVM Functions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#init">init()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_fd">get_fd()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_version">get_version()</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#vm-functions">VM Functions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#vm">VM()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vcpu-create_vcpu">VCPU* create_vcpu()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#load_binary">load_binary()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#load_text_binary">load_text_binary()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#mem_init">mem_init()</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#vcpu-functions">VCPU Functions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#vcpu">VCPU()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vcpu_1">VCPU(...)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#run">run()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#run_real_mode">run_real_mode()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#run_protected_mode">run_protected_mode()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#set_cores">set_cores()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#setup_segment_registers">setup_segment_registers()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#page_tables">page_tables()</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture & Design</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">mumu</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Reference</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="reference">Reference</h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This section is under development. </p>
+</div>
+<h2 id="kvm-functions">KVM Functions</h2>
+<h3 id="init"><code>init()</code></h3>
+<pre><code>int KVM::init();
+</code></pre>
+<p><strong>Returns</strong>: file descriptor of KVM instance</p>
+<h3 id="get_fd"><code>get_fd()</code></h3>
+<pre><code>uint32_t KVM::get_fd() const;
+</code></pre>
+<p><strong>Returns</strong>: file descriptor of KVM instance</p>
+<h3 id="get_version"><code>get_version()</code></h3>
+<pre><code>uint32_t KVM::get_version() const;
+</code></pre>
+<p><strong>Returns</strong>: version of KVM instance</p>
+<h2 id="vm-functions">VM Functions</h2>
+<h3 id="vm"><code>VM()</code></h3>
+<pre><code>VM(KVM *_ref);
+</code></pre>
+<p><strong>Returns</strong>: VM object</p>
+<p><strong>Description</strong>: Creates VM with <code>KVM_CREATE_VM</code> ioctl</p>
+<h3 id="vcpu-create_vcpu"><code>VCPU* create_vcpu()</code></h3>
+<pre><code class="language-cpp">VCPU* create_vcpu(int, uint8_t, uint8_t)
+</code></pre>
+<p><strong>Returns</strong>: VCPU object</p>
+<p><strong>Args</strong>: int _id, uint8_t _virtual_core, uint8_t _physical_core</p>
+<p><strong>Description</strong>: Creates VM with <code>KVM_CREATE_VM</code> ioctl</p>
+<h3 id="load_binary"><code>load_binary()</code></h3>
+<pre><code>void load_binary(const string _file);
+</code></pre>
+<p><strong>Returns</strong>: none</p>
+<p><strong>Description</strong>: Load binary from a file</p>
+<h3 id="load_text_binary"><code>load_text_binary()</code></h3>
+<pre><code>void load_text_binary(uint8_t[],int);
+</code></pre>
+<p><strong>Returns</strong>: none</p>
+<p><strong>Description</strong>: Load binary from char array</p>
+<h3 id="mem_init"><code>mem_init()</code></h3>
+<pre><code>int mem_init();
+</code></pre>
+<p><strong>Returns</strong>: 1 on success -1 on error</p>
+<p><strong>Description</strong>: Initialize memory region for VM.</p>
+<h2 id="vcpu-functions">VCPU Functions</h2>
+<h3 id="vcpu"><code>VCPU()</code></h3>
+<pre><code>VCPU(){};
+</code></pre>
+<p><strong>Returns</strong>: VCPU object</p>
+<p><strong>Description</strong>: Default constructor.</p>
+<h3 id="vcpu_1"><code>VCPU(...)</code></h3>
+<pre><code>VCPU(int, int, struct kvm_run*,int)
+</code></pre>
+<p><strong>Returns</strong>: VCPU object</p>
+<p><strong>Description</strong>: Extended constructor.</p>
+<h3 id="run"><code>run()</code></h3>
+<pre><code>void run(int,int);
+</code></pre>
+<p><strong>Returns</strong>: none</p>
+<p><strong>Args</strong>: core, sec</p>
+<p><strong>Description</strong>: Run VCPU thread.</p>
+<h3 id="run_real_mode"><code>run_real_mode()</code></h3>
+<pre><code>int run_real_mode();
+</code></pre>
+<p><strong>Returns</strong>: -1 on error 1 on success</p>
+<p><strong>Description</strong>: Configure VCPU for running on real mode</p>
+<h3 id="run_protected_mode"><code>run_protected_mode()</code></h3>
+<pre><code>int run_protected_mode();
+</code></pre>
+<p><strong>Returns</strong>: -1 on error 1 on success</p>
+<p><strong>Description</strong>: Configure VCPU for running on protected mode</p>
+<h3 id="set_cores"><code>set_cores()</code></h3>
+<pre><code>void set_cores(int, int);
+</code></pre>
+<p><strong>Returns</strong>: none</p>
+<p><strong>Args</strong>: physical core, virtual core</p>
+<p><strong>Description</strong>: Configure VCPU cores</p>
+<h3 id="setup_segment_registers"><code>setup_segment_registers()</code></h3>
+<pre><code>void setup_segment_registers();
+</code></pre>
+<p><strong>Returns</strong>: none</p>
+<p><strong>Description</strong>: Configure segment registers for 32 bit and 64 mode</p>
+<h3 id="page_tables"><code>page_tables()</code></h3>
+<pre><code>void page_tables(void* mem, struct kvm_sregs *sregs)
+</code></pre>
+<p><strong>Returns</strong>: none</p>
+<p><strong>Args</strong>: memory region, register struct</p>
+<p><strong>Description</strong>: Setup page tables for 64bit long mode</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../architecture/" class="btn btn-neutral float-right" title="Architecture & Design">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../gsg/" class="btn btn-neutral" title="Getting Started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../gsg/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../architecture/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
