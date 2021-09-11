@@ -1,0 +1,27 @@
+site_name: mumu
+
+extra_css: 
+  - ./style.css
+
+
+markdown_extensions:
+  - admonition
+  - smarty
+  - markdown_include.include:
+        base_path: docs
+
+theme:
+    name: readthedocs
+    highlightjs: true
+    hljs_languages:
+        - cpp
+        - c
+
+nav:
+    - 'index.md'
+    - 'gsg.md'
+    - 'reference.md'
+    - 'architecture.md'
+    - 'examples.md'
+
+dev_addr: 127.0.0.1:8081
